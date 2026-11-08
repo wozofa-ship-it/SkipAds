@@ -1,0 +1,30 @@
+name: Build SkipAds.dylib
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos "$HOME/theos"
+          echo "THEOS=$HOME/theos" >> "$GITHUB_ENV"
+
+      - name: Build dylib
+        run: make
+
+      - name: Locate dylib
+        run: find .theos -name "SkipAds.dylib" -type f
+
+      - name: Upload dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: SkipAds-dylib
+          path: .theos/**/SkipAds.dylib
+          if-no-files-found: error

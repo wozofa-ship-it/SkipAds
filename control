@@ -1,0 +1,9 @@
+Package: com.jk.skipads
+Name: SkipAds
+Version: 0.2.0
+Architecture: iphoneos-arm
+Description: 自动跳过开屏广告（iOS 版李跳跳）
+Maintainer: wozofa-ship-it
+Author: wozofa-ship-it
+Section: Tweaks
+Depends: mobilesubstrate
