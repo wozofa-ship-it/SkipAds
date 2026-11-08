@@ -22,12 +22,14 @@ jobs:
       - name: Build dylib
         run: make
 
-      - name: Locate dylib
-        run: find .theos -name "SkipAds.dylib" -type f
+      - name: Copy dylib to visible path
+        run: |
+          cp .theos/obj/debug/arm64/SkipAds.dylib ./SkipAds.dylib
+          ls -la SkipAds.dylib
 
       - name: Upload dylib
         uses: actions/upload-artifact@v4
         with:
           name: SkipAds-dylib
-          path: .theos/**/SkipAds.dylib
+          path: SkipAds.dylib
           if-no-files-found: error
