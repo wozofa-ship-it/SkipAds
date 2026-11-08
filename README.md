@@ -41,5 +41,5 @@ make package  # 打 deb（需要 control，越狱机用）
 
 ## 已知注意点
 
-- `keyWindow` 在 iOS 13+ 已废弃，代码仍用它取当前窗口；多数单窗口 App 正常，多场景 App 可能扫不到，需后续改走 `connectedScenes` 取 keyWindow。
+- 取 keyWindow 已改走 `connectedScenes`（老 `UIApplication.keyWindow` 在 iOS 13+ 已废弃，Theos 默认 `-Werror` 编不过；多场景 App 下老写法也可能取不到窗口）。
 - 0.5 秒定时器 + `viewDidAppear` 后 0.3 秒各扫一次，开屏广告一般 3–5 秒，足够在出现的第一时间点掉。

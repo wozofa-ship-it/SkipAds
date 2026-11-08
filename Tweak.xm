@@ -58,9 +58,29 @@ static BOOL scanView(UIView *view) {
     return NO;
 }
 
+// 取当前 keyWindow：UIApplication.keyWindow 在 iOS 13+ 已废弃，
+// Theos 默认 -Werror 编不过；改走 connectedScenes，多场景下也取得到
+static UIWindow *czfKeyWindow(void) {
+    UIApplication *app = [UIApplication sharedApplication];
+    for (UIScene *scene in app.connectedScenes) {
+        if (scene.activationState != UISceneActivationStateForegroundActive) continue;
+        if (![scene isKindOfClass:[UIWindowScene class]]) continue;
+        for (UIWindow *window in [(UIWindowScene *)scene windows]) {
+            if (window.isKeyWindow) return window;
+        }
+    }
+    // 兜底：前台场景的第一个窗口
+    for (UIScene *scene in app.connectedScenes) {
+        if (![scene isKindOfClass:[UIWindowScene class]]) continue;
+        UIWindow *window = [[(UIWindowScene *)scene windows] firstObject];
+        if (window) return window;
+    }
+    return nil;
+}
+
 // 扫一次当前 keyWindow
 static void scanKeyWindow(void) {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIWindow *keyWindow = czfKeyWindow();
     if (!keyWindow) return;
     scanView(keyWindow);
 }
